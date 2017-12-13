@@ -48,7 +48,7 @@ Count: 000046    Operation: 000014 : 0xF4 (hlt)
 
 ### Register
 
-|name  |siz e|
+|name  |size |
 |:-----|:----|
 |eax   |32bit|
 |ecx   |32bit|
