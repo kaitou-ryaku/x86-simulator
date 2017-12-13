@@ -98,6 +98,7 @@ Count: 000046    Operation: 000014 : 0xF4 (hlt)
 |c  ||leave|||||||
 |d  |||||||||
 |e  |call imm32|jmp imm32||jmp imm8|||||
+|f  |||||||||
 
 ### License
 
