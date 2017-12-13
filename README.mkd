@@ -1,0 +1,104 @@
+# x86-80386 (IA-32) Simulator
+
+This is a simple x86-32 simulator or debugger.
+
+1. The argument binary file is set from the initial memory address prepared in the simulator.
+2. The program is run with `eip = 0`. Stack memory is prepared at the end of the memory.
+3. The values of the registers and memories are displayed on the standard output.
+
+### Build
+
+```sh
+$ cd x86-simulation
+$ make
+```
+
+### Usage
+
+To run the test program file [test.asm](example/test.asm),
+
+```sh
+$ nasm test.asm -o test.bin
+$ ./x86-simulator.out test.bin
+..................
+..................
+   (many lines)
+..................
+..................
+
+Count: 000045    Operation: 000012 : 0x7C (jl imm8)
+
+CF:1 ZF:1 SF:0 OF:0
+---- Plain Order Bit Expression            Binary Editor Expression              Hex Dump      Integer      Decimal
+EAX: 01010000 00000000 00000000 00000000 : 00001010 00000000 00000000 00000000 : 0A 00 00 00 : 0x0000000A : 10
+ECX: 01010000 00000000 00000000 00000000 : 00001010 00000000 00000000 00000000 : 0A 00 00 00 : 0x0000000A : 10
+EDX: 00000000 00000000 00000000 00000000 : 00000000 00000000 00000000 00000000 : 00 00 00 00 : 0x00000000 : 0
+EBX: 11101100 00000000 00000000 00000000 : 00110111 00000000 00000000 00000000 : 37 00 00 00 : 0x00000037 : 55
+ESP: 00000000 00100000 00000000 00000000 : 00000000 00000100 00000000 00000000 : 00 04 00 00 : 0x00000400 : 1024
+EBP: 00000000 00000000 00000000 00000000 : 00000000 00000000 00000000 00000000 : 00 00 00 00 : 0x00000000 : 0
+ESI: 00000000 00000000 00000000 00000000 : 00000000 00000000 00000000 00000000 : 00 00 00 00 : 0x00000000 : 0
+EDI: 00000000 00000000 00000000 00000000 : 00000000 00000000 00000000 00000000 : 00 00 00 00 : 0x00000000 : 0
+EIP: 11001000 00000000 00000000 00000000 : 00010011 00000000 00000000 00000000 : 13 00 00 00 : 0x00000013 : 19
+000000: B8 00 00 00 00 B9 0A 00 00 00 EB 03 40 01 C3 39
+000010: C8 7C F9 F4
+PROGRAM GLOBAL_VARIABLE / STACK
+
+Count: 000046    Operation: 000014 : 0xF4 (hlt)
+```
+
+### Register
+
+|name  |siz e|
+|:-----|:----|
+|eax   |32bit|
+|ecx   |32bit|
+|edx   |32bit|
+|ebx   |32bit|
+|esp   |32bit|
+|ebp   |32bit|
+|esi   |32bit|
+|edi   |32bit|
+|eip   |32bit|
+|eflags|32bit|
+
+### Instruction
+
+|LEFT|0  |1  |2  |3  |4  |5  |6  |7  |
+|:--|:--|:--|:--|:--|:--|:--|:--|:--|
+|0  ||add [M+imm], R||add R, [M+imm]||add eax, imm32|||
+|1  ||adc [M+imm], R||adc R, [M+imm]||adc eax, imm32|||
+|2  ||and [M+imm], R||and R, [M+imm]||and eax, imm32|||
+|3  ||xor [M+imm], R||xor R, [M+imm]||xor eax, imm32|||
+|4  |inc  eax|inc  ecx|inc  edx|inc  ebx|inc  esp|inc  ebp|inc  esi|inc  edi|
+|5  |push eax|push ecx|push edx|push ebx|push esp|push ebp|push esi|push edi|
+|6  |||||||||
+|7  |jo imm8|jno imm8|jb imm8|jae imm8|je imm8|jne imm8|jbe imm8|ja imm8|
+|8  ||calc reg, imm32||calc reg, imm8|||||
+|9  |nop||||||||
+|a  ||||mov [imm32], eax|||||
+|b  |||||||||
+|c  ||||ret||||mov [M+imm], imm32|
+|d  |||||||||
+|e  |||||||||
+|f  |||||hlt||||
+|   |||||||||
+|RIGHT|8  |9  |a  |b  |c  |d  |e  |f  |
+|0  ||or  [M+imm], R||or  R, [M+imm]||or  eax, imm32||jcc imm32|
+|1  ||sbb [M+imm], R||sbb R, [M+imm]||sbb eax, imm32|||
+|2  ||sub [M+imm], R||sub R, [M+imm]||sub eax, imm32|||
+|3  ||cmp [M+imm], R||cmp R, [M+imm]||cmp eax, imm32|||
+|4  |dec eax|dec ecx|dec edx|dec ebx|dec esp|dec ebp|dec esi|dec edi|
+|5  |pop eax|pop ecx|pop edx|pop ebx|pop esp|pop ebp|pop esi|pop edi|
+|6  |push imm32||push imm8||||||
+|7  |js imm8|jns imm8|jp imm8|jnp imm8|jl imm8|jge imm8|jle imm8|jg imm8|
+|8  ||mov [M+imm], R||mov R, [M+imm]|||||
+|9  |||||||||
+|a  |||||||||
+|b  |mov eax, imm32|ecx|edx|ebx|esp|ebp|esi|edi|
+|c  ||leave|||||||
+|d  |||||||||
+|e  |call imm32|jmp imm32||jmp imm8|||||
+
+### License
+
+MIT
